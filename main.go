@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	l, err := net.Listen("tcp", ":6379")
+	l, err := net.Listen("tcp", ":6379") // start server, returns listener and error
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -26,21 +26,26 @@ func main() {
 	// close connection once finished
 
 	for {
+		// create new deserializer for each request
 		deserializer := resp.NewDeserializer(conn)
+		// Read RESP formatted input
 		value, err := deserializer.Read()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-
+		// Validation
 		if value.Type != "array" || len(value.Array) == 0 {
 			fmt.Println("invalid request")
 			continue
 		}
-
+		// Extraction
 		command := strings.ToUpper(value.Array[0].Bulk)
 		args := value.Array[1:]
+
+		// Set up writer, and execute handler
 		writer := resp.NewWriter(conn)
+		// Handler function
 		handler, ok := resp.Handlers[command]
 		if !ok {
 			fmt.Println("invalid command: ", command)
