@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine AS build
+FROM golang:1.21-alpine AS build
 
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
@@ -12,7 +12,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o ./dist/redis-clone ./cmd/main.go
+RUN go build -o ./dist/redis-clone main.go
 
 FROM alpine:3.14
 
