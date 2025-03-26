@@ -1,7 +1,3 @@
-Here’s the revised **README.md** file, following your instructions:
-
----
-
 # Redis Clone
 
 ## Overview
